@@ -71,10 +71,19 @@ export default class extends ApplicationController {
             this.leafletMap.invalidateSize();
         });*/
 
-        document.querySelectorAll(`a[data-bs-toggle="tab"]`)
+
+        //оставить это
+        /*document.querySelectorAll(`a[data-bs-toggle="tab"]`)
             .forEach((event) =>
-                event.addEventListener('shown.bs.tab', this.leafletMap.invalidateSize, )
+                event.addEventListener('shown.bs.tab', this.leafletMap.invalidateSize)
             );
+         */
+        //или это
+        document.on('shown.bs.tab', 'a[data-bs-toggle="tab"]', () => {
+            this.leafletMap.invalidateSize();
+        })
+
+
     }
 
     /**
@@ -113,14 +122,22 @@ export default class extends ApplicationController {
                 results.innerHTML = null;
 
                 if (items.length !== 0) {
+                    //не знаю как это заменить
                     $('<ul/>', {
                         'class': 'my-2',
                         html: items.join('')
                     }).appendTo(results);
+                    //results.appendChild();
                     return;
                 }
 
-                $('<small>', {html: "No results found"}).appendTo(results);
+
+                //$('<small>', {html: "No results found"}).appendTo(results);
+
+                const node = document.createElement("small");
+                const textnode = document.createTextNode("No results found");
+                node.appendChild(textnode);//appendChild нельзя использоватьв цепочке
+                results.appendChild(node);
             });
 
     }
